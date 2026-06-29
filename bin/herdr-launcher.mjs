@@ -1,9 +1,10 @@
 #!/usr/bin/env node
-// Multi-field form runner. Usable as a CLI and as a herdr plugin.
-//   forms list                              list available forms
-//   forms run <name> [--field value ...]    run a form (prompts for missing fields when a TTY)
-//   forms pick                              interactive picker (used by the herdr pane)
-//   forms open                              open the picker as a herdr pane (used by the action)
+// herdr-launcher — a form-driven launcher. Usable as a CLI and as a herdr plugin.
+//   herdr-launcher list                          list available forms
+//   herdr-launcher new [--field value ...]       shortcut for `run new-task`
+//   herdr-launcher run <name> [--field value ...] run a form (prompts for missing fields when a TTY)
+//   herdr-launcher pick                          interactive picker (used by the herdr pane)
+//   herdr-launcher open                          open the picker as a herdr pane (used by the action)
 // Forms are config-as-code .mjs files exporting { name, description, fields[], run() }.
 // Loaded from $HERDR_FORMS_DIR, $HERDR_PLUGIN_CONFIG_DIR/forms, ~/.config/herdr/forms,
 // and the plugin's bundled examples/ (earlier dirs win on name clash).
@@ -95,7 +96,12 @@ const ctx = () => ({ cwd: process.cwd(), env: process.env });
 
 async function main() {
   const { positionals, flags } = parseArgs(process.argv.slice(2));
-  const cmd = positionals[0] || "list";
+  let cmd = positionals[0] || "list";
+  // `new` is a shortcut for `run new-task`
+  if (cmd === "new") {
+    positionals.splice(0, 1, "run", "new-task");
+    cmd = "run";
+  }
   const forms = await loadForms();
 
   if (cmd === "list") {
@@ -108,7 +114,7 @@ async function main() {
     const herdr = process.env.HERDR_BIN_PATH || "herdr";
     const pluginId = process.env.HERDR_PLUGIN_ID;
     if (!pluginId) throw new Error("HERDR_PLUGIN_ID not set — run via the herdr action");
-    execFileSync(herdr, ["plugin", "pane", "open", "--plugin", pluginId, "--entrypoint", "forms-ui", "--placement", "overlay"], { stdio: "inherit" });
+    execFileSync(herdr, ["plugin", "pane", "open", "--plugin", pluginId, "--entrypoint", "launcher-ui", "--placement", "overlay"], { stdio: "inherit" });
     return;
   }
 
@@ -150,7 +156,7 @@ async function main() {
     return;
   }
 
-  throw new Error(`unknown command: ${cmd} (use: list | run <name> | pick | open)`);
+  throw new Error(`unknown command: ${cmd} (use: list | new | run <name> | pick | open)`);
 }
 
 main().catch((e) => {

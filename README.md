@@ -1,9 +1,9 @@
-# herdr-plugin-forms
+# herdr-launcher
 
-Multi-field input **forms that run a command** — for [Herdr](https://herdr.dev).
-Pick a form from a menu inside herdr, fill in its fields, and it runs. The same
-forms work as a plain CLI (`forms run <name> --field value …`), so they're also
-scriptable.
+A **form-driven launcher** for [Herdr](https://herdr.dev). Pick a form from a
+menu inside herdr, fill in its fields, and it runs a command. The same forms
+work as a plain CLI (`herdr-launcher run <name> --field value …`), so they're
+also scriptable.
 
 herdr-plus's Quick Actions stop at a single input field; this fills the gap with
 arbitrary fields per form.
@@ -17,18 +17,19 @@ arbitrary fields per form.
 ## Install
 
 ```bash
-herdr plugin install arjenblokzijl/herdr-plugin-forms
+herdr plugin install arjenblokzijl/herdr-launcher
 ```
 
-Optional — also expose it as a `forms` CLI on your `PATH`. The plugin's install
-path is shown by `herdr plugin list`; from that directory (or a local checkout):
+Optional — also expose it as a `herdr-launcher` CLI on your `PATH`. The plugin's
+install path is shown by `herdr plugin list`; from that directory (or a local
+checkout):
 
 ```bash
-sh ./install.sh        # symlinks bin/forms.mjs -> ~/.local/bin/forms
+sh ./install.sh        # symlinks bin/herdr-launcher.mjs -> ~/.local/bin/herdr-launcher
 ```
 
-In herdr, run the **"Forms: pick & run"** action (or bind a key to it) to open
-the picker. As a CLI: `forms list`, `forms run <name>`.
+In herdr, run the **"Launcher: pick & run"** action (or bind a key to it) to open
+the picker. As a CLI: `herdr-launcher list`, `herdr-launcher run <name>`.
 
 ## Writing a form
 
@@ -65,10 +66,10 @@ Put your own forms in `~/.config/herdr/forms/`. See `examples/forms/greet.mjs`.
 ## CLI
 
 ```bash
-forms list                                   # list forms
-forms run new-task --title fix-login --prompt "implement login"   # non-interactive
-forms run new-task                           # prompts for missing fields (TTY)
-forms run <name> --help                      # show a form's fields
+herdr-launcher list                          # list forms
+herdr-launcher new --title fix-login --prompt "implement login"   # shortcut for `run new-task`
+herdr-launcher run <name>                    # prompts for missing fields (TTY)
+herdr-launcher run <name> --help             # show a form's fields
 ```
 
 A form's `run()` may call out to herdr (`$HERDR_BIN_PATH`) — those forms need a

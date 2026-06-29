@@ -1,20 +1,20 @@
-id = "arjenblokzijl.forms"
-name = "Forms"
+id = "arjenblokzijl.herdr-launcher"
+name = "Launcher"
 version = "0.1.0"
 min_herdr_version = "0.7.0"
-description = "Multi-field input forms that run a command. A menu picker inside herdr and a CLI (forms run <name>). Each form is a config-as-code .mjs (fields + run). Zero runtime deps; needs Node >= 18."
+description = "A form-driven launcher: pick a form, fill its fields, and it runs a command — in herdr (menu picker) and as a CLI (herdr-launcher run <name>). Forms are config-as-code .mjs. Zero runtime deps; needs Node >= 18."
 platforms = ["macos", "linux"]
 
-# Open the form picker (an interactive overlay pane). Bind a key or run from the
-# action menu.
+# Open the launcher picker (an interactive overlay pane). Bind a key or run from
+# the action menu.
 [[actions]]
-id = "forms"
-title = "Forms: pick & run"
-command = ["./bin/forms.mjs", "open"]
+id = "pick"
+title = "Launcher: pick & run"
+command = ["./bin/herdr-launcher.mjs", "open"]
 
 # The interactive picker, as a herdr-managed overlay pane.
 [[panes]]
-id = "forms-ui"
-title = "Forms"
+id = "launcher-ui"
+title = "Launcher"
 placement = "overlay"
-command = ["./bin/forms.mjs", "pick"]
+command = ["./bin/herdr-launcher.mjs", "pick"]
