@@ -58,10 +58,10 @@ Loaded from the first match per name, in order:
 
 1. `$HERDR_FORMS_DIR`
 2. `$HERDR_PLUGIN_CONFIG_DIR/forms` (this plugin's config dir, when run in herdr)
-3. `~/.config/herdr/forms/`
+3. `~/.config/herdr-launcher/forms/`
 4. the plugin's bundled `examples/forms/`
 
-Put your own forms in `~/.config/herdr/forms/`. See `examples/forms/greet.mjs`.
+Put your own forms in `~/.config/herdr-launcher/forms/`. See `examples/forms/greet.mjs`.
 
 ## CLI
 

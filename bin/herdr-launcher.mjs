@@ -6,7 +6,7 @@
 //   herdr-launcher pick                          interactive picker (used by the herdr pane)
 //   herdr-launcher open                          open the picker as a herdr pane (used by the action)
 // Forms are config-as-code .mjs files exporting { name, description, fields[], run() }.
-// Loaded from $HERDR_FORMS_DIR, $HERDR_PLUGIN_CONFIG_DIR/forms, ~/.config/herdr/forms,
+// Loaded from $HERDR_FORMS_DIR, $HERDR_PLUGIN_CONFIG_DIR/forms, ~/.config/herdr-launcher/forms,
 // and the plugin's bundled examples/ (earlier dirs win on name clash).
 
 import { readdirSync, existsSync } from "node:fs";
@@ -22,7 +22,7 @@ function formDirs() {
   const dirs = [];
   if (process.env.HERDR_FORMS_DIR) dirs.push(process.env.HERDR_FORMS_DIR);
   if (process.env.HERDR_PLUGIN_CONFIG_DIR) dirs.push(join(process.env.HERDR_PLUGIN_CONFIG_DIR, "forms"));
-  dirs.push(join(homedir(), ".config", "herdr", "forms"));
+  dirs.push(join(homedir(), ".config", "herdr-launcher", "forms"));
   dirs.push(join(here, "..", "examples", "forms"));
   return dirs;
 }
@@ -120,7 +120,7 @@ async function main() {
 
   if (cmd === "pick") {
     if (!forms.length) {
-      console.log("No forms found. Add .mjs files to ~/.config/herdr/forms/");
+      console.log("No forms found. Add .mjs files to ~/.config/herdr-launcher/forms/");
       await ask("Press Enter to close…");
       return;
     }

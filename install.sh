@@ -11,4 +11,4 @@ mkdir -p "$bindir"
 ln -sfn "$root/bin/herdr-launcher.mjs" "$bindir/herdr-launcher"
 
 echo "Linked $bindir/herdr-launcher -> $root/bin/herdr-launcher.mjs"
-echo "Put your forms in ~/.config/herdr/forms/ (see examples/forms/)."
+echo "Put your forms in ~/.config/herdr-launcher/forms/ (see examples/forms/)."
