@@ -2,7 +2,7 @@ id = "arjenblokzijl.herdr-launcher"
 name = "Launcher"
 version = "0.1.0"
 min_herdr_version = "0.7.0"
-description = "A form-driven launcher: pick a form, fill its fields, and it runs a command — in herdr (menu picker) and as a CLI (herdr-launcher run <name>). Forms are config-as-code .mjs. Zero runtime deps; needs Node >= 18."
+description = "A workflow launcher: pick a workflow, fill its fields, and it runs a command — in herdr (menu picker) and as a CLI (herdr-launcher run <name>). Workflows are config-as-code .mjs. Zero runtime deps; needs Node >= 18."
 platforms = ["macos", "linux"]
 
 # Open the launcher picker (an interactive overlay pane). Bind a key or run from

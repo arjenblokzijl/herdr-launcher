@@ -1,5 +1,5 @@
-// Example form demonstrating the shape: { name, description, fields[], run() }.
-// Copy a form like this into ~/.config/herdr/forms/ and edit run() to do real work.
+// Example workflow demonstrating the shape: { name, description, fields[], run() }.
+// Copy a workflow like this into ~/.config/herdr-launcher/workflows/ and edit run().
 
 export default {
   name: "greet",

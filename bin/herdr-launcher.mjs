@@ -1,13 +1,13 @@
 #!/usr/bin/env node
-// herdr-launcher — a form-driven launcher. Usable as a CLI and as a herdr plugin.
-//   herdr-launcher list                          list available forms
+// herdr-launcher — a workflow launcher. Usable as a CLI and as a herdr plugin.
+//   herdr-launcher list                          list available workflows
 //   herdr-launcher new [--field value ...]       shortcut for `run new-task`
-//   herdr-launcher run <name> [--field value ...] run a form (prompts for missing fields when a TTY)
+//   herdr-launcher run <name> [--field value ...] run a workflow (prompts for missing fields when a TTY)
 //   herdr-launcher pick                          interactive picker (used by the herdr pane)
 //   herdr-launcher open                          open the picker as a herdr pane (used by the action)
-// Forms are config-as-code .mjs files exporting { name, description, fields[], run() }.
-// Loaded from $HERDR_FORMS_DIR, $HERDR_PLUGIN_CONFIG_DIR/forms, ~/.config/herdr-launcher/forms,
-// and the plugin's bundled examples/ (earlier dirs win on name clash).
+// Workflows are config-as-code .mjs files exporting { name, description, fields[], run() }.
+// Loaded from $HERDR_WORKFLOWS_DIR, $HERDR_PLUGIN_CONFIG_DIR/workflows,
+// ~/.config/herdr-launcher/workflows, and the plugin's bundled examples/ (earlier dirs win).
 
 import { readdirSync, existsSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -18,18 +18,18 @@ import { execFileSync } from "node:child_process";
 
 const here = dirname(fileURLToPath(import.meta.url));
 
-function formDirs() {
+function workflowDirs() {
   const dirs = [];
-  if (process.env.HERDR_FORMS_DIR) dirs.push(process.env.HERDR_FORMS_DIR);
-  if (process.env.HERDR_PLUGIN_CONFIG_DIR) dirs.push(join(process.env.HERDR_PLUGIN_CONFIG_DIR, "forms"));
-  dirs.push(join(homedir(), ".config", "herdr-launcher", "forms"));
-  dirs.push(join(here, "..", "examples", "forms"));
+  if (process.env.HERDR_WORKFLOWS_DIR) dirs.push(process.env.HERDR_WORKFLOWS_DIR);
+  if (process.env.HERDR_PLUGIN_CONFIG_DIR) dirs.push(join(process.env.HERDR_PLUGIN_CONFIG_DIR, "workflows"));
+  dirs.push(join(homedir(), ".config", "herdr-launcher", "workflows"));
+  dirs.push(join(here, "..", "examples", "workflows"));
   return dirs;
 }
 
-async function loadForms() {
+async function loadWorkflows() {
   const byName = new Map();
-  for (const dir of formDirs()) {
+  for (const dir of workflowDirs()) {
     if (!existsSync(dir)) continue;
     for (const file of readdirSync(dir).filter((f) => f.endsWith(".mjs"))) {
       const mod = await import(pathToFileURL(join(dir, file)).href);
@@ -66,10 +66,10 @@ function ask(question) {
   return new Promise((res) => rl.question(question, (a) => (rl.close(), res(a))));
 }
 
-async function collect(form, flags) {
+async function collect(workflow, flags) {
   const interactive = process.stdin.isTTY && !flags["no-input"];
   const values = {};
-  for (const field of form.fields || []) {
+  for (const field of workflow.fields || []) {
     let val = flags[field.name];
     if (val === undefined || val === true) {
       if (interactive) {
@@ -102,11 +102,11 @@ async function main() {
     positionals.splice(0, 1, "run", "new-task");
     cmd = "run";
   }
-  const forms = await loadForms();
+  const workflows = await loadWorkflows();
 
   if (cmd === "list") {
-    console.log("Available forms:");
-    for (const f of forms) console.log(`  ${f.name}\t${f.description || ""}`);
+    console.log("Available workflows:");
+    for (const w of workflows) console.log(`  ${w.name}\t${w.description || ""}`);
     return;
   }
 
@@ -119,23 +119,23 @@ async function main() {
   }
 
   if (cmd === "pick") {
-    if (!forms.length) {
-      console.log("No forms found. Add .mjs files to ~/.config/herdr-launcher/forms/");
+    if (!workflows.length) {
+      console.log("No workflows found. Add .mjs files to ~/.config/herdr-launcher/workflows/");
       await ask("Press Enter to close…");
       return;
     }
-    console.log("Forms:\n");
-    forms.forEach((f, i) => console.log(`  ${i + 1}) ${f.name}  —  ${f.description || ""}`));
+    console.log("Workflows:\n");
+    workflows.forEach((w, i) => console.log(`  ${i + 1}) ${w.name}  —  ${w.description || ""}`));
     console.log("");
-    const sel = (await ask("Pick a form (number or name): ")).trim();
-    const form = forms[parseInt(sel, 10) - 1] || forms.find((f) => f.name === sel);
-    if (!form) {
-      console.error(`no such form: ${sel}`);
+    const sel = (await ask("Pick a workflow (number or name): ")).trim();
+    const workflow = workflows[parseInt(sel, 10) - 1] || workflows.find((w) => w.name === sel);
+    if (!workflow) {
+      console.error(`no such workflow: ${sel}`);
       await ask("Press Enter to close…");
       return;
     }
     try {
-      await form.run(await collect(form, {}), ctx());
+      await workflow.run(await collect(workflow, {}), ctx());
     } catch (e) {
       console.error(String(e?.message || e));
       await ask("Press Enter to close…");
@@ -144,15 +144,15 @@ async function main() {
   }
 
   if (cmd === "run") {
-    const form = forms.find((f) => f.name === positionals[1]);
-    if (!form) throw new Error(`unknown form: ${positionals[1] || "(none given)"}`);
+    const workflow = workflows.find((w) => w.name === positionals[1]);
+    if (!workflow) throw new Error(`unknown workflow: ${positionals[1] || "(none given)"}`);
     if (flags.help) {
-      console.log(`${form.name} — ${form.description || ""}\nFields:`);
-      for (const fl of form.fields || [])
+      console.log(`${workflow.name} — ${workflow.description || ""}\nFields:`);
+      for (const fl of workflow.fields || [])
         console.log(`  --${fl.name}\t${fl.prompt || ""}${fl.required ? " (required)" : ""}`);
       return;
     }
-    await form.run(await collect(form, flags), ctx());
+    await workflow.run(await collect(workflow, flags), ctx());
     return;
   }
 
