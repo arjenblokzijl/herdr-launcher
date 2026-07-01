@@ -1,0 +1,8 @@
+name = "new-branch"
+description = "Create a git branch (declarative example)"
+command = "git switch -c \"$HERDR_FIELD_name\" && echo \"created $HERDR_FIELD_name\""
+
+[[fields]]
+name = "name"
+prompt = "Branch name"
+required = true

@@ -1,20 +1,26 @@
 id = "arjenblokzijl.herdr-launcher"
 name = "Launcher"
-version = "0.1.0"
+version = "0.2.0"
 min_herdr_version = "0.7.0"
-description = "A workflow launcher: pick a workflow, fill its fields, and it runs a command — in herdr (menu picker) and as a CLI (herdr-launcher run <name>). Workflows are config-as-code .mjs. Zero runtime deps; needs Node >= 18."
+description = "A workflow launcher with a ratatui TUI picker + field form (fuzzy select, multi-line). Declarative TOML workflows, single static Rust binary."
 platforms = ["macos", "linux"]
 
-# Open the launcher picker (an interactive overlay pane). Bind a key or run from
-# the action menu.
+# Compile ./bin/herdr-launcher on install (cargo, or mise's rust).
+[[build]]
+command = ["sh", "build.sh"]
+
+# Open the picker as a right-split pane. Wrapped in `sh -c` so $HERDR_PLUGIN_ROOT
+# (set by herdr for plugin processes) expands at runtime — resolving the binary
+# regardless of the pane's cwd.
 [[actions]]
 id = "pick"
 title = "Launcher: pick & run"
-command = ["./bin/herdr-launcher.mjs", "open"]
+command = ["sh", "-c", "exec \"$HERDR_PLUGIN_ROOT/bin/herdr-launcher\" open"]
 
-# The interactive picker, as a herdr-managed overlay pane.
+# The ratatui picker + field form, as a right split pane (--direction right is set
+# by the open call). Pane title shows as "Launcher".
 [[panes]]
 id = "launcher-ui"
 title = "Launcher"
-placement = "overlay"
-command = ["./bin/herdr-launcher.mjs", "pick"]
+placement = "split"
+command = ["sh", "-c", "exec \"$HERDR_PLUGIN_ROOT/bin/herdr-launcher\" pick"]

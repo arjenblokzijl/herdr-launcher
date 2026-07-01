@@ -1,0 +1,13 @@
+name = "greet"
+description = "Example — prints a greeting (declarative)"
+command = "echo \"Hi $HERDR_FIELD_name — lang=$HERDR_FIELD_lang\""
+
+[[fields]]
+name = "name"
+prompt = "Your name"
+required = true
+
+[[fields]]
+name = "lang"
+prompt = "Language (en/nl)"
+default = "en"

@@ -1,0 +1,21 @@
+[package]
+name = "herdr-launcher"
+version = "0.2.0"
+edition = "2021"
+
+[[bin]]
+name = "herdr-launcher"
+path = "src/main.rs"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.8"
+ratatui = "0.29"
+tui-input = "0.11"
+tui-textarea = "0.7"
+nucleo-matcher = "0.3"
+
+[profile.release]
+opt-level = "z"
+strip = true
