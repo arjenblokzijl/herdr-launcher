@@ -1,0 +1,26 @@
+name = "launch-agent"
+description = "Create a worktree and launch an agent on a prompt"
+command = "bash $HERDR_WORKFLOW_DIR/agent-launcher.sh"
+
+[[fields]]
+name = "title"
+prompt = "Worktree title"
+required = true
+
+[[fields]]
+name = "prompt"
+prompt = "What should the agent do"
+required = true
+multiline = true
+
+[[fields]]
+name = "agent"
+prompt = "Agent"
+required = true
+choices_command = "bash $HERDR_WORKFLOW_DIR/agents.sh list"
+
+[[fields]]
+name = "base"
+prompt = "Starting branch"
+required = true
+choices_command = "bash $HERDR_WORKFLOW_DIR/list-branches.sh"

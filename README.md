@@ -96,6 +96,13 @@ Loaded from the first match per name, in order:
 Put your own workflows in `~/.config/herdr-launcher/workflows/`. See
 `examples/workflows/`.
 
+The bundled **`launch-agent`** example is a real bundle: it creates a git worktree
+off a chosen base branch and starts a coding agent in it via herdr's native
+`agent start`, reading its agent roster from an `agents` file (`name=command`).
+It is launch-only by design — it adds the agent in its own pane and leaves the
+worktree's root pane untouched, so a separate `worktree.created` hook (deps setup,
+a layout manager, …) can act on that pane without ever colliding with the agent.
+
 ## CLI
 
 ```bash
