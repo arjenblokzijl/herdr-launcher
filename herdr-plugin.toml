@@ -1,6 +1,6 @@
 id = "arjenblokzijl.herdr-launcher"
 name = "Launcher"
-version = "0.2.0"
+version = "0.3.0"
 min_herdr_version = "0.7.0"
 description = "A workflow launcher with a ratatui TUI picker + field form (fuzzy select, multi-line). Declarative TOML workflows, single static Rust binary."
 platforms = ["macos", "linux"]

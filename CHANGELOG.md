@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-07-10
+
 ### Added
 
 - Field names are validated as POSIX shell identifiers at load time. A workflow with
@@ -58,6 +60,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed the core concept from "form" to "workflow".
 - Moved user workflows to `~/.config/herdr-launcher/workflows/`.
 
-[Unreleased]: https://github.com/arjenblokzijl/herdr-launcher/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/arjenblokzijl/herdr-launcher/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/arjenblokzijl/herdr-launcher/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/arjenblokzijl/herdr-launcher/compare/b2c2ce3...v0.2.0
 [0.1.0]: https://github.com/arjenblokzijl/herdr-launcher/commit/b2c2ce3
