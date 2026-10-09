@@ -9,16 +9,16 @@ platforms = ["macos", "linux"]
 [[build]]
 command = ["sh", "build.sh"]
 
-# Open the picker as a right-split pane. Wrapped in `sh -c` so $HERDR_PLUGIN_ROOT
-# (set by herdr for plugin processes) expands at runtime — resolving the binary
-# regardless of the pane's cwd.
+# Open the picker using the placement from config.toml (split by default).
+# Wrapped in `sh -c` so $HERDR_PLUGIN_ROOT (set by herdr for plugin processes)
+# expands at runtime.
 [[actions]]
 id = "pick"
 title = "Launcher: pick & run"
 command = ["sh", "-c", "exec \"$HERDR_PLUGIN_ROOT/bin/herdr-launcher\" open"]
 
-# The ratatui picker + field form, as a right split pane (--direction right is set
-# by the open call). Pane title shows as "Launcher".
+# Direct entrypoint and invalid-config fallback. The open action overrides this
+# with either split or overlay after validating Launcher configuration.
 [[panes]]
 id = "launcher-ui"
 title = "Launcher"
